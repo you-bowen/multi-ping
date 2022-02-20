@@ -1,3 +1,7 @@
+## ybw 魔改版multi-ping
+
+> 原来的版本在ping多次之后，再ping到down的host的时候会报OSerror，我把这个feature给patch掉了（就是简单的try except）
+
 # MultiPing: A pure-python implemention to monitor IP addresses with pings
 
 MultiPing is a Python library to monitor one or many IP addresses via ICMP echo
@@ -45,13 +49,13 @@ _Note: ICMP packets can only be sent by processes with root privileges._
 Here is an example of how to use MultiPing in your own code:
 
     from multiping import MultiPing
-
+    
     # Create a MultiPing object to test three hosts / addresses
     mp = MultiPing(["8.8.8.8", "youtube.com", "127.0.0.1"])
-
+    
     # Send the pings to those addresses
     mp.send()
-
+    
     # With a 1 second timout, wait for responses (may return sooner if all
     # results are received).
     responses, no_responses = mp.receive(1)
@@ -61,10 +65,10 @@ The `receive()` function returns a tuple containing a results dictionary
 respond in time. The results may be processed like this:
 
     ...
-
+    
     for addr, rtt in responses.items():
         print "%s responded in %f seconds" % (addr, rtt)
-
+    
     if no_responses:
         print "These addresses did not respond: %s" % ", ".join(no_responses)
         # Sending pings once more, but just to those addresses that have not
@@ -74,7 +78,7 @@ respond in time. The results may be processed like this:
         # heard back, yet.
         mp.send()
         responses, no_responses = mp.receive(1)
-
+    
         ...
 
 Note that `send()` can be called multiple times. If there are any addresses
@@ -85,9 +89,9 @@ A convenient `multi_ping()` function is provided, which implements retries and
 delivers results in a single and simple function call:
 
     from multiping import multi_ping
-
+    
     addrs = ["8.8.8.8", "youtube.com", "127.0.0.1"]
-
+    
     # Ping the addresses up to 4 times (initial ping + 3 retries), over the
     # course of 2 seconds. This means that for those addresses that do not
     # respond another ping will be sent every 0.5 seconds.
@@ -100,4 +104,3 @@ cannot be resolved or looked up, a `socket.gaierror` is raised. This can be
 surpressed if the `silent_lookup_errors` parameter flag is set. Either as named
 parameter for the `multi_ping` function or when a `MultiPing` object is
 created.
-

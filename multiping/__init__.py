@@ -278,7 +278,10 @@ class MultiPing(object):
                 # 'No route to host'
                 pass
         else:
-            self._sock.sendto(full_pkt, full_dest_addr)
+            try:
+                self._sock.sendto(full_pkt, full_dest_addr)
+            except:
+                pass
 
     def send(self):
         """
